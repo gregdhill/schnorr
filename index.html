@@ -15,6 +15,9 @@
     tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
   });
 </script>
+<style>
+.value { margin-left: 50px; }
+</style>
 </head>
 
 <body>
@@ -30,14 +33,14 @@
 
 <p>Both parties hold $\langle\langle p,m,g \rangle, h \rangle$. Where $p$ is a prime number and $g\in \mathbb{Z}_p^*$.</p>
 
-<label for="#prime">p</label>
-<input id="prime" name="prime" type="number" value="7" onchange="update()"/>
+<label class="value" for="prime">p =</label>
+<input id="prime" name="prime" type="number" value="11" onchange="update()"/>
 <br>
-<label for="#gen">g</label>
-<input id="gen" name="gen" type="number" value="3" onchange="update()"/>
+<label class="value" for="gen">g =</label>
+<input id="gen" name="gen" type="number" value="2" onchange="update()"/>
 <br>
-<label for="#proof">h</label>
-<input id="proof" name="proof" type="number" disabled/>
+<label class="value" for="proof">h =</label>
+<output id="proof" name="proof"></output>
 <br>
 
 <p>As $G=\langle g \rangle$ is a cyclic group, $m=ord(g)=p-1$.</p>
@@ -46,9 +49,9 @@
 
 <p>The prover $P$ doesn't want to reveal $w$.</p>
 
-<label for="#witness">w</label>
-<button onclick="generate('witness')">Select</button>
-<input id="witness" name="witness" type="number" value="3" onchange="update()"/>
+<label class="value" for="witness">w =</label>
+<input id="witness" name="witness" type="number" value="7" onchange="update()"/>
+<button onclick="generate('witness')">Generate</button>
 <br><br><br>
 
 
@@ -57,12 +60,12 @@
 
 <p>$P$ selects $t \leftarrow^r \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
 
-<label for="#offer_t">t</label>
-<button onclick="generate('offer_t')">Select</button>
+<label class="value" for="offer_t">t =</label>
 <input id="offer_t" name="offer_t" type="number" value="3" onchange="update()"/>
+<button onclick="generate('offer_t')">Generate</button>
 <br>
-<label for="#offer_y">y</label>
-<input id="offer_y" name="offer_y" type="number" disabled/>
+<label class="value" for="offer_y">y =</label>
+<output id="offer_y" name="offer_y"></output>
 <br><br><br>
 
 
@@ -70,9 +73,9 @@
 
 <p>$V$ selects $c \leftarrow^r \mathbb{Z}_m$ and sends $c$ to $P$.</p>
 
-<label for="#challenge">c</label>
-<button onclick="generate('challenge')">Select</button>
+<label class="value" for="challenge">c =</label>
 <input id="challenge" name="challenge" type="number" value="3" onchange="update()"/>
+<button onclick="generate('challenge')">Generate</button>
 <br><br><br>
 
 
@@ -81,8 +84,8 @@
 
 <p>$P$ calculates $s=t+cw \; mod \; m$ and sends $s$ to $V$.</p>
 
-<label for="#response">s</label>
-<input id="response" name="response" type="number" disabled/>
+<label class="value" for="response">s = </label>
+<output id="response" name="response"></output>
 <br><br><br>
 
 

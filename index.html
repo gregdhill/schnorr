@@ -19,7 +19,7 @@
 
 <body>
 
-<h1>Schnorr's Protocol</h1>
+<h1 style="text-align:center;">Schnorr's Protocol</h1>
 
 <p>A prover $P$ wants to convince a verifier $V$ of some knowledge of a discrete logarithm. The $\Sigma$-protocol (Schnorr) is a three-move protocol that exhibits the properties of zero-knowledge.</p>
 <br>
@@ -31,10 +31,10 @@
 <p>Both parties hold $\langle\langle p,m,g \rangle, h \rangle$. Where $p$ is a prime number and $g\in \mathbb{Z}_p^*$.</p>
 
 <label for="#prime">p</label>
-<input id="prime" name="prime" type="number" value="7"/>
+<input id="prime" name="prime" type="number" value="7" onchange="update()"/>
 <br>
 <label for="#gen">g</label>
-<input id="gen" name="gen" type="number" value="3"/>
+<input id="gen" name="gen" type="number" value="3" onchange="update()"/>
 <br>
 <label for="#proof">h</label>
 <input id="proof" name="proof" type="number" disabled/>
@@ -47,8 +47,8 @@
 <p>The prover $P$ doesn't want to reveal $w$.</p>
 
 <label for="#witness">w</label>
-<button onclick="generate('witness',change_w)">Select</button>
-<input id="witness" name="witness" type="number" value="3" onchange="change_w()"/>
+<button onclick="generate('witness')">Select</button>
+<input id="witness" name="witness" type="number" value="3" onchange="update()"/>
 <br><br><br>
 
 
@@ -58,8 +58,8 @@
 <p>$P$ selects $t \leftarrow^r \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
 
 <label for="#offer_t">t</label>
-<button onclick="generate('offer_t',change_t)">Select</button>
-<input id="offer_t" name="offer_t" type="number" value="3" onchange="change_t()"/>
+<button onclick="generate('offer_t')">Select</button>
+<input id="offer_t" name="offer_t" type="number" value="3" onchange="update()"/>
 <br>
 <label for="#offer_y">y</label>
 <input id="offer_y" name="offer_y" type="number" disabled/>
@@ -71,8 +71,8 @@
 <p>$V$ selects $c \leftarrow^r \mathbb{Z}_m$ and sends $c$ to $P$.</p>
 
 <label for="#challenge">c</label>
-<button onclick="generate('challenge',change_c)">Select</button>
-<input id="challenge" name="challenge" type="number" value="3" onchange="change_c()"/>
+<button onclick="generate('challenge')">Select</button>
+<input id="challenge" name="challenge" type="number" value="3" onchange="update()"/>
 <br><br><br>
 
 
@@ -96,48 +96,31 @@
 
 
 
-<script type="text/javascript">
-   function updateMathContent(s) {
-       var math = MathJax.Hub.getAllJax("mathdiv")[0];
-       MathJax.Hub.Queue(["Text", math, s]);
-   }
-</script>
 
 
 <script>
-function generate(location,update) {
+function generate(location) {
 	var m = parseInt(document.getElementById("prime").value)-1;
 	var v = Math.floor((Math.random() * m) + 1)
 	document.getElementById(location).value = v;
 	update();
 }
 
-// update the witness
-function change_w() {
+function update() {
 	var g = parseInt(document.getElementById("gen").value);
 	var w = parseInt(document.getElementById("witness").value);
 	var p = parseInt(document.getElementById("prime").value);
     document.getElementById("proof").value = Math.pow(g, w)%p;
-}
 
-// update the offer
-function change_t() {
-	var g = parseInt(document.getElementById("gen").value);
 	var t = parseInt(document.getElementById("offer_t").value);
-	var p = parseInt(document.getElementById("prime").value);
     document.getElementById("offer_y").value = Math.pow(g, t)%p;
-	change_c();
-}
 
-// update the response
-function change_c() {
-	var t = parseInt(document.getElementById("offer_t").value);
 	var c = parseInt(document.getElementById("challenge").value);
-	var w = parseInt(document.getElementById("witness").value);
 	var m = parseInt(document.getElementById("prime").value) - 1;
     document.getElementById("response").value = (t+((c*w)%m));
 }
 
+// verify
 function calculate() {
 	var g = parseInt(document.getElementById("gen").value);
 	var s = parseInt(document.getElementById("response").value);
@@ -156,9 +139,7 @@ function calculate() {
 }
 
 window.addEventListener('load', function () {
-	change_w();
-	change_t();
-	change_c();
+	update();
 }, false);
 
 </script>

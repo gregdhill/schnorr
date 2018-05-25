@@ -16,22 +16,92 @@
   });
 </script>
 <style>
+html, body {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+}
+h2 { margin-left: 25px; }
+h3 { margin-left: 50px; }
 .value { margin-left: 50px; }
+#diagram {
+    width: 900px;
+	height: 410px;
+    padding: 10px;
+    border: 2px solid black;
+    margin: 0;
+	margin-left: auto;
+	margin-right: auto;
+}
+.arrow {
+    width:100%;
+}
+.line {
+	margin-top: 8px;
+	width: 96.66%;
+	background: black;
+	height: 3px;
+	float: left;
+}
+.lpoint {	
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid black;
+	float: left;
+}
+.rpoint {	
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-left: 10px solid black;
+	float: right;
+}
+.column {
+    float: left;
+    width: 33.33%;
+}
+.column h4 { text-align: center; }
+.column p {
+	text-align: center;
+	margin-bottom: 0px;
+}
+.full {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.center { text-align: center; }
 </style>
 </head>
 
 <body>
 
-<h1 style="text-align:center;">Schnorr's Protocol</h1>
+<h1 class="center">Schnorr's Protocol</h1>
 
-<p style="text-align:center;">A prover $P$ wants to convince a verifier $V$ of some knowledge of a discrete logarithm. The $\Sigma$-protocol (Schnorr) is a three-move protocol that exhibits the properties of zero-knowledge.</p>
+<p class="center">A prover $P$ wants to convince a verifier $V$ of some knowledge of a discrete logarithm. The $\Sigma$-protocol (Schnorr) is a three-move protocol that exhibits the properties of zero-knowledge.</p>
 <br>
 
 <h2>Parameters</h2>
 
-<h3>Public</h3>
+<ul>
+	<li>Both parties hold $\langle\langle p,m,g \rangle, h \rangle$, where:</li>
+		<ul>
+			<li>$p$ is a prime number,</li>
+			<li>$g\in \mathbb{Z}_p^*$,</li>
+			<li>$h=g^w \; mod \; p$.</li>
+		</ul>
+	<li>As $G=\langle g \rangle$ is a cyclic group, $m=ord(g)=p-1$.</li>
+	<li>Only the prover $P$ holds $w\in \mathbb{Z}_m$ which remains secret.</li>
+</ul>
 
-<p>Both parties hold $\langle\langle p,m,g \rangle, h \rangle$. Where $p$ is a prime number and $g\in \mathbb{Z}_p^*$.</p>
+
+
+<h3>Public</h3>
 
 <label class="value" for="prime">p =</label>
 <input id="prime" name="prime" type="number" value="11" onchange="update()"/>
@@ -43,11 +113,9 @@
 <output id="proof" name="proof"></output>
 <br>
 
-<p>As $G=\langle g \rangle$ is a cyclic group, $m=ord(g)=p-1$.</p>
 
 <h3>Private</h3>
 
-<p>The prover $P$ doesn't want to reveal $w$.</p>
 
 <label class="value" for="witness">w =</label>
 <input id="witness" name="witness" type="number" value="7" onchange="update()"/>
@@ -58,7 +126,7 @@
 
 <h2>Offer</h2>
 
-<p>$P$ selects $t \leftarrow^r \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
+<p class="value">$P$ selects $t \leftarrow^r \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
 
 <label class="value" for="offer_t">t =</label>
 <input id="offer_t" name="offer_t" type="number" value="3" onchange="update()"/>
@@ -71,7 +139,7 @@
 
 <h2>Challenge</h2>
 
-<p>$V$ selects $c \leftarrow^r \mathbb{Z}_m$ and sends $c$ to $P$.</p>
+<p class="value">$V$ selects $c \leftarrow^r \mathbb{Z}_m$ and sends $c$ to $P$.</p>
 
 <label class="value" for="challenge">c =</label>
 <input id="challenge" name="challenge" type="number" value="3" onchange="update()"/>
@@ -82,7 +150,7 @@
 
 <h2>Response</h2>
 
-<p>$P$ calculates $s=t+cw \; mod \; m$ and sends $s$ to $V$.</p>
+<p class="value">$P$ calculates $s=t+cw \; mod \; m$ and sends $s$ to $V$.</p>
 
 <label class="value" for="response">s = </label>
 <output id="response" name="response"></output>
@@ -92,8 +160,76 @@
 
 <h2>Result</h2>
 
-<p id="result">$V$ is convinced if $g^s \; mod \; p = yh^c \; mod \; p$</p>
-<button onclick="calculate()">Compute</button>
+<p class="value">$V$ is convinced if $g^s \; mod \; p = yh^c \; mod \; p$ as:</p>
+
+<p style="width: 30%;">
+\[
+\begin{align}
+g^s & = g^{t+cw} \\
+	& = g^t \cdot g^{wc} \\
+	& = g^t \cdot (g^w)^c \\
+	& = y \cdot h^c \\
+\end{align}
+\]
+</p>
+
+
+<h1 class="center">Demo</h1>
+
+<div id="diagram">
+
+<div class="row">
+	<div class="column">
+		<h4>P</h4>
+		<p id="choose-t">$t \leftarrow^r \mathbb{Z}_m$</p>
+		<p id="choose-y">$y=g^t \; mod \; p$</p>
+		<br><br><br><br><br><br>
+		<p id="choose-s">$s=t+cw \; mod \; m$</p>
+	</div>
+
+	<div class="column">
+
+		<p id="params">$\langle\langle p,m,g \rangle, h \rangle$</p>
+
+		<br><br><br><br>
+
+		<div class="arrow">
+		<p id="send-y">y</p>
+		<div class="line"></div>
+		<div class="rpoint"></div>
+		</div>
+
+		<br><br>
+
+		<div class="arrow">
+		<p id="send-c">c</p>
+		<div class="lpoint"></div>
+		<div class="line"></div>
+		</div>
+
+		<br><br>
+
+		<div class="arrow">
+		<p id="send-s">s</p>
+		<div class="line"></div>
+		<div class="rpoint"></div>
+		</div>
+
+	</div>
+
+	<div class="column">
+		<h4>V</h4>
+		<br><br><br><br><br><br>
+		<p id="choose-c">$c \leftarrow^r \mathbb{Z}_m$</p>
+		<br><br><br><br><br>
+		<p id="compare">$g^s = yh^c$</p>
+		<p id="result"></p>
+	</div>
+</div>
+
+</div>
+
+<div class="full"><button onclick="calculate()">Compute</button></div>
 <br><br><br>
 
 
@@ -122,6 +258,11 @@ function update() {
 
 // verify
 function calculate() {
+
+	var t = parseInt(document.getElementById("offer_t").value);
+	var m = parseInt(document.getElementById("prime").value)-1;
+	var w = parseInt(document.getElementById("witness").value);
+
 	var g = parseInt(document.getElementById("gen").value);
 	var s = parseInt(document.getElementById("response").value);
 	var p = parseInt(document.getElementById("prime").value);
@@ -132,10 +273,25 @@ function calculate() {
 	var c = parseInt(document.getElementById("challenge").value);
 	var yhc = (y * Math.pow(h,c))%p;
 
-	if (gs==yhc) document.getElementById("result").innerHTML = "As $g^s="+gs+"$ and $yh^c="+yhc+"$, the verifier is convinced.";
-	else document.getElementById("result").innerHTML = "As $g^s="+gs+"$ and $yh^c="+yhc+"$, the verifier is not convinced."
+	document.getElementById("params").innerHTML = "$\\langle\\langle "+p+","+m+","+g+" \\rangle, "+h+" \\rangle$";
+
+	document.getElementById("choose-t").innerHTML = "$"+t+" \\leftarrow^r \\mathbb{Z}\_{"+m+"}$";
+	document.getElementById("choose-y").innerHTML = "$"+y+"="+g+"^{"+t+"} \\; mod \\; "+p+"$";
+	document.getElementById("choose-s").innerHTML = "$"+s+"="+t+"+"+c+"\\cdot"+w+" \\; mod \\; "+m+"$";
+	
+	document.getElementById("send-y").innerHTML = y;
+	document.getElementById("send-c").innerHTML = c;
+	document.getElementById("send-s").innerHTML = s;
+
+	document.getElementById("choose-c").innerHTML = "$"+c+" \\leftarrow^r \\mathbb{Z}\_{"+m+"}$";
+	document.getElementById("compare").innerHTML = "$"+g+"^"+s+" \\; mod \\; "+p+" = "+y+"\\cdot"+h+"^{"+c+"} \\; mod \\; "+p+"$<br>";
+	document.getElementById("compare").append("$"+gs+" = "+yhc+"$");
+
+	if (gs==yhc) document.getElementById("result").innerHTML = "<font color='green'>Convinced</font>";
+	else document.getElementById("result").innerHTML = "<font color='red'>Not Convinced</font>";
 
 	MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById("result")]);
+	MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById("diagram")]);
 }
 
 window.addEventListener('load', function () {

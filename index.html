@@ -21,12 +21,17 @@ html, body {
 	padding: 0px;
 	border: 0px;
 }
-h2 { margin-left: 25px; }
-h3 { margin-left: 50px; }
-.value { margin-left: 50px; }
+.wrap h1 { text-align: center; }
+.wrap .desc { text-align: center; margin-left: 0; padding: 10px; }
+.wrap p { margin-left: 50px; }
+.wrap label { margin-left: 50px; }
+.wrap h2 { margin-left: 25px; }
+.wrap h3 { margin-left: 50px; }
+.wrap input { margin-bottom: 20px; }
+.section { margin-bottom: 50px; }
 #diagram {
-    width: 900px;
-	height: 410px;
+    width: 80%;
+	height: 420px;
     padding: 10px;
     border: 2px solid black;
     margin: 0;
@@ -38,26 +43,32 @@ h3 { margin-left: 50px; }
 }
 .line {
 	margin-top: 8px;
-	width: 96.66%;
+	width: 95%;
 	background: black;
 	height: 3px;
 	float: left;
 }
-.lpoint {	
-	width: 0;
-	height: 0;
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent;
-	border-right: 10px solid black;
+.lbox {
+	width: 5%;
 	float: left;
 }
-.rpoint {	
+.rbox {
+	width: 5%;
+	float: right;
+}
+.lbox div {	
 	width: 0;
 	height: 0;
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-left: 10px solid black;
-	float: right;
+	border-right: 20px solid black;
+}
+.rbox div {	
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-left: 20px solid black;
 }
 .column {
     float: left;
@@ -75,19 +86,21 @@ h3 { margin-left: 50px; }
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
-.center { text-align: center; }
 </style>
 </head>
 
 <body>
 
-<h1 class="center">Schnorr's Protocol</h1>
 
-<p class="center">A prover $P$ wants to convince a verifier $V$ of some knowledge of a discrete logarithm. The $\Sigma$-protocol (Schnorr) is a three-move protocol that exhibits the properties of zero-knowledge.</p>
+<div class="wrap">
+
+<h1>Schnorr's Protocol</h1>
+
+<p class="desc">A prover $P$ wants to convince a verifier $V$ of some knowledge of a discrete logarithm. The $\Sigma$-protocol (Schnorr) is a three-move protocol that exhibits the properties of zero-knowledge.</p>
 <br>
 
+<div class="section">
 <h2>Parameters</h2>
-
 <ul>
 	<li>Both parties hold $\langle\langle p,m,g \rangle, h \rangle$, where:</li>
 		<ul>
@@ -99,69 +112,55 @@ h3 { margin-left: 50px; }
 	<li>Only the prover $P$ holds $w\in \mathbb{Z}_m$ which remains secret.</li>
 </ul>
 
-
-
 <h3>Public</h3>
-
-<label class="value" for="prime">p =</label>
-<input id="prime" name="prime" type="number" value="11" onchange="update()"/>
-<br>
-<label class="value" for="gen">g =</label>
-<input id="gen" name="gen" type="number" value="2" onchange="update()"/>
-<br>
-<label class="value" for="proof">h =</label>
-<output id="proof" name="proof"></output>
-<br>
-
+<div class="row"><label for="prime">p =</label>
+<input id="prime" name="prime" type="number" value="11" onchange="update()"/></div>
+<div class="row"><label for="gen">g =</label>
+<input id="gen" name="gen" type="number" value="2" onchange="update()"/></div>
+<div class="row"><label for="proof">h =</label>
+<output id="proof" name="proof"></output></div>
 
 <h3>Private</h3>
-
-
-<label class="value" for="witness">w =</label>
+<div class="row"><label for="witness">w =</label>
 <input id="witness" name="witness" type="number" value="7" onchange="update()"/>
-<button onclick="generate('witness')">Generate</button>
-<br><br><br>
+<button onclick="generate('witness')">Generate</button></div>
+</div><!-- section end -->
 
 
-
+<div class="section">
 <h2>Offer</h2>
+<p>$P$ selects $t \xleftarrow{r} \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
 
-<p class="value">$P$ selects $t \leftarrow^r \mathbb{Z}_m$ and sends $y=g^t \; mod \; p$ to $V$.</p>
-
-<label class="value" for="offer_t">t =</label>
+<div class="row"><label for="offer_t">t =</label>
 <input id="offer_t" name="offer_t" type="number" value="3" onchange="update()"/>
-<button onclick="generate('offer_t')">Generate</button>
-<br>
-<label class="value" for="offer_y">y =</label>
-<output id="offer_y" name="offer_y"></output>
-<br><br><br>
+<button onclick="generate('offer_t')">Generate</button></div>
+<div class="row"><label for="offer_y">y =</label>
+<output id="offer_y" name="offer_y"></output></div>
+</div><!-- section end -->
 
 
+<div class="section">
 <h2>Challenge</h2>
+<p>$V$ selects $c \xleftarrow{r} \mathbb{Z}_m$ and sends $c$ to $P$.</p>
 
-<p class="value">$V$ selects $c \leftarrow^r \mathbb{Z}_m$ and sends $c$ to $P$.</p>
-
-<label class="value" for="challenge">c =</label>
+<div class="row"><label for="challenge">c =</label>
 <input id="challenge" name="challenge" type="number" value="3" onchange="update()"/>
-<button onclick="generate('challenge')">Generate</button>
-<br><br><br>
+<button onclick="generate('challenge')">Generate</button></div>
+</div><!-- section end -->
 
 
-
+<div class="section">
 <h2>Response</h2>
+<p>$P$ calculates $s=t+cw \; mod \; m$ and sends $s$ to $V$.</p>
 
-<p class="value">$P$ calculates $s=t+cw \; mod \; m$ and sends $s$ to $V$.</p>
-
-<label class="value" for="response">s = </label>
-<output id="response" name="response"></output>
-<br><br><br>
-
+<div class="row"><label for="response">s = </label>
+<output id="response" name="response"></output></div>
+</div><!-- section end -->
 
 
+<div class="section">
 <h2>Result</h2>
-
-<p class="value">$V$ is convinced if $g^s \; mod \; p = yh^c \; mod \; p$ as:</p>
-
+<p>$V$ is convinced if $g^s \; mod \; p = yh^c \; mod \; p$ as:</p>
 <p style="width: 30%;">
 \[
 \begin{align}
@@ -172,61 +171,60 @@ g^s & = g^{t+cw} \\
 \end{align}
 \]
 </p>
+</div><!-- section end -->
+</div><!-- wrap end -->
 
 
-<h1 class="center">Demo</h1>
-
+<h1 style="text-align: center;">Demo</h1>
 <div id="diagram">
-
-<div class="row">
-	<div class="column">
-		<h4>P</h4>
-		<p id="choose-t">$t \leftarrow^r \mathbb{Z}_m$</p>
-		<p id="choose-y">$y=g^t \; mod \; p$</p>
-		<br><br><br><br><br><br>
-		<p id="choose-s">$s=t+cw \; mod \; m$</p>
-	</div>
-
-	<div class="column">
-
-		<p id="params">$\langle\langle p,m,g \rangle, h \rangle$</p>
-
-		<br><br><br><br>
-
-		<div class="arrow">
-		<p id="send-y">y</p>
-		<div class="line"></div>
-		<div class="rpoint"></div>
+	<div class="row">
+		<div class="column">
+			<h4>P</h4>
+			<p id="choose-t">$t \xleftarrow{r} \mathbb{Z}_m$</p>
+			<p id="choose-y">$y=g^t \; mod \; p$</p>
+			<br><br><br><br><br><br>
+			<p id="choose-s">$s=t+cw \; mod \; m$</p>
 		</div>
 
-		<br><br>
+		<div class="column">
 
-		<div class="arrow">
-		<p id="send-c">c</p>
-		<div class="lpoint"></div>
-		<div class="line"></div>
+			<p id="params">$\langle\langle p,m,g \rangle, h \rangle$</p>
+
+			<br><br><br><br>
+
+			<div class="arrow">
+			<p id="send-y">y</p>
+			<div class="line"></div>
+			<div class="rbox"><div></div></div>
+			</div>
+
+			<br><br>
+
+			<div class="arrow">
+			<p id="send-c">c</p>
+			<div class="lbox"><div></div></div>
+			<div class="line"></div>
+			</div>
+
+			<br><br>
+
+			<div class="arrow">
+			<p id="send-s">s</p>
+			<div class="line"></div>
+			<div class="rbox"><div></div></div>
+			</div>
+
 		</div>
 
-		<br><br>
-
-		<div class="arrow">
-		<p id="send-s">s</p>
-		<div class="line"></div>
-		<div class="rpoint"></div>
+		<div class="column">
+			<h4>V</h4>
+			<br><br><br><br><br><br>
+			<p id="choose-c">$c \xleftarrow{r} \mathbb{Z}_m$</p>
+			<br><br><br><br><br>
+			<p id="compare">$g^s = yh^c$</p>
+			<p id="result"></p>
 		</div>
-
 	</div>
-
-	<div class="column">
-		<h4>V</h4>
-		<br><br><br><br><br><br>
-		<p id="choose-c">$c \leftarrow^r \mathbb{Z}_m$</p>
-		<br><br><br><br><br>
-		<p id="compare">$g^s = yh^c$</p>
-		<p id="result"></p>
-	</div>
-</div>
-
 </div>
 
 <div class="full"><button onclick="calculate()">Compute</button></div>
@@ -275,7 +273,7 @@ function calculate() {
 
 	document.getElementById("params").innerHTML = "$\\langle\\langle "+p+","+m+","+g+" \\rangle, "+h+" \\rangle$";
 
-	document.getElementById("choose-t").innerHTML = "$"+t+" \\leftarrow^r \\mathbb{Z}\_{"+m+"}$";
+	document.getElementById("choose-t").innerHTML = "$"+t+" \\xleftarrow{r} \\mathbb{Z}\_{"+m+"}$";
 	document.getElementById("choose-y").innerHTML = "$"+y+"="+g+"^{"+t+"} \\; mod \\; "+p+"$";
 	document.getElementById("choose-s").innerHTML = "$"+s+"="+t+"+"+c+"\\cdot"+w+" \\; mod \\; "+m+"$";
 	
@@ -283,14 +281,13 @@ function calculate() {
 	document.getElementById("send-c").innerHTML = c;
 	document.getElementById("send-s").innerHTML = s;
 
-	document.getElementById("choose-c").innerHTML = "$"+c+" \\leftarrow^r \\mathbb{Z}\_{"+m+"}$";
+	document.getElementById("choose-c").innerHTML = "$"+c+" \\xleftarrow{r} \\mathbb{Z}\_{"+m+"}$";
 	document.getElementById("compare").innerHTML = "$"+g+"^"+s+" \\; mod \\; "+p+" = "+y+"\\cdot"+h+"^{"+c+"} \\; mod \\; "+p+"$<br>";
 	document.getElementById("compare").append("$"+gs+" = "+yhc+"$");
 
 	if (gs==yhc) document.getElementById("result").innerHTML = "<font color='green'>Convinced</font>";
 	else document.getElementById("result").innerHTML = "<font color='red'>Not Convinced</font>";
 
-	MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById("result")]);
 	MathJax.Hub.Queue(['Typeset', MathJax.Hub, document.getElementById("diagram")]);
 }
 
